@@ -146,6 +146,8 @@ if(oldData.video != newData.video)
           <p><big>Introduction Video has been updated by Candidate Id: <b>${newData.id}</b></big></p>
           <p>
               Please review the profile. Below is the Candidate Details:<br />
+          </p>
+          <p>
               Candidate Id: <b>${newData.id}</b><br />
               Name: <b>${newData.name}</b><br />
               E-Mail: <b>${newData.email}</b><br />
@@ -154,7 +156,7 @@ if(oldData.video != newData.video)
 
           </p>
           <p>
-              This is a system generated Mail.
+          <br /><br />This is a system generated Mail.
           </p>`
   };
 
