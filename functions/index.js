@@ -113,3 +113,60 @@ exports.onCompanyRegistered=functions.firestore.document('CompanyInfo/{CompanyId
       });
 });
 
+exports.onIntroductionVideoUpdate=functions.firestore.document('CandidateInfo/{CandidateId}').onUpdate((change,context)=>{
+  const oldData=change.before.data();
+  const newData=change.after.data();
+
+if(oldData.video != newData.video)
+{
+  let transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+          type: 'OAuth2',
+          // user: 'ankur.sardar16@gmail.com',
+          // clientId: '1008266135608-il5jgnhue7vhpjb3pjql4hgfu2stfr24.apps.googleusercontent.com',
+          // clientSecret:'Sx7zpORMlJRNfqZYo6iqueZ2',
+          // refreshToken:'1/Mi479BEZ2I7YNKiWAaVcDTnkVwgMaBchoP0WhbdVYB8',
+          user: 'onetro_support@willings.co.jp',
+          clientId: '1099430575149-b3kjo3dn3lfohgbq8ir0vgkeqa49d53n.apps.googleusercontent.com',
+          clientSecret:'KRfEoqGH353Ai8jc5tNu9I-D',
+          refreshToken:'1/uUURtqh4Kdc6tLW2oo2GCqTNrB38s4GfP75xryEJiyYEX9iTaGPJwryL6_lVXC8R'
+      }
+  });
+
+  let mailOptions={
+      from:'onetro_support@willings.co.jp',
+      to: 'ankur.sardar16@gmail.com',
+      subject:'Introduction video updated',
+      generateTextFromHTML: true,
+      html: `
+              <p><b><big>Hello Team</big></b></p>
+          <p><big>Introduction Video has been updated by Candidate Id: <b>${newData.id}</b></big></p>
+          <p>
+              Please review the profile. Below is the Candidate Details:<br />
+              Candidate Id: <b>${newData.id}</b><br />
+              Name: <b>${newData.name}</b><br />
+              E-Mail: <b>${newData.email}</b><br />
+              Video file name: <b>${newData.id}</b><br />
+              Video file location: <b>OnetroCompany > Storage > IntroVideo > </b><br />
+
+          </p>
+          <p>
+              This is a system generated Mail.
+          </p>`
+  };
+
+  return new Promise((resolve, reject) => {
+      transporter.sendMail(mailOptions, error => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+});
+
