@@ -172,3 +172,42 @@ if(oldData.video != newData.video)
   }
 });
 
+exports.sendEmail=functions.https.onRequest((req,res)=>{
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        type: 'OAuth2',
+        user: 'onetro_support@willings.co.jp',
+        clientId: '1099430575149-b3kjo3dn3lfohgbq8ir0vgkeqa49d53n.apps.googleusercontent.com',
+        clientSecret:'KRfEoqGH353Ai8jc5tNu9I-D',
+        refreshToken:'1/uUURtqh4Kdc6tLW2oo2GCqTNrB38s4GfP75xryEJiyYEX9iTaGPJwryL6_lVXC8R'
+    }
+});
+
+let mailOptions={
+    from:'onetro_support@willings.co.jp',
+    to: data.email,
+    subject:'Registration Successful with Onetro',
+    generateTextFromHTML: true,
+    html: `
+            <p><b><big>Hello ${data.name}</big></b></p>
+        <p><big>Welcome to Onetro.</big></p>
+        <p>
+            You have successfully registered on Onetro with email <b>${data.email}.</b><br />
+            If there are any changes required or any other queries, please reply to this mail or contact us at <b>contact@willings.co.jp</b>.
+        </p>
+        <p>
+            Now that you have registered, please update all the information in your profile and complete that to let the hiring begin.<br />
+            We look forward to serve you.
+        </p>
+
+        <p>
+            Best regards,<br />
+            Team Onetro
+        </p>`
+};
+
+});
+
