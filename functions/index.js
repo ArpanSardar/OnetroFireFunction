@@ -188,19 +188,21 @@ exports.sendEmail=functions.https.onRequest((req,res)=>{
 
 let mailOptions={
     from:'onetro_support@willings.co.jp',
-    to: data.email,
-    subject:'Registration Successful with Onetro',
+    to: req.query.email,
+    subject:'Reminder to complete Onetro profile',
     generateTextFromHTML: true,
     html: `
-            <p><b><big>Hello ${data.name}</big></b></p>
-        <p><big>Welcome to Onetro.</big></p>
+            <p><b><big>Hello ${req.query.name}</big></b></p>
+        <p><big>Greetings from Onetro.</big></p>
         <p>
-            You have successfully registered on Onetro with email <b>${data.email}.</b><br />
-            If there are any changes required or any other queries, please reply to this mail or contact us at <b>contact@willings.co.jp</b>.
+          We noticed you have not completed your profile yet. 
+          If your profile is not complete, companies will not be able to see your profile. 
+          Please complete your profile to let the hiring begin. You will also be credited 3 stars 
+          that can be exchanged for money later.
         </p>
         <p>
-            Now that you have registered, please update all the information in your profile and complete that to let the hiring begin.<br />
-            We look forward to serve you.
+          If there are any changes or any other queries, please contact us at 
+          <b>onetro_support@willings.co.jp</b> or reply to this mail.
         </p>
 
         <p>
@@ -208,6 +210,19 @@ let mailOptions={
             Team Onetro
         </p>`
 };
+
+return new Promise((resolve, reject) => {
+  transporter.sendMail(mailOptions, error => {
+    if (error) {
+      reject(error);
+      res.send("Error in sending email.");
+    } else {
+      resolve();
+      res.send("Email sent successfully.");
+
+    }
+  });
+});
 
 });
 
