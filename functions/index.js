@@ -9,8 +9,6 @@ const SENDGRID_API_KEY= functions.config().sendgrid.key;
 const Mail=require('@sendgrid/mail');
 Mail.setApiKey(SENDGRID_API_KEY);
 
-const hbs= require('nodemailer-express-handlebars');
-
 exports.onCandidateRegistered=functions.firestore.document('CandidateInfo/{CandidateId}').onCreate((snap,context)=>{
     const data=snap.data();
     
@@ -35,7 +33,6 @@ exports.onCandidateRegistered=functions.firestore.document('CandidateInfo/{Candi
     let mailOptions={
         from:'onetro_support@willings.co.jp',
         to: data.email,
-        bcc: 'contact@willings.co.jp',
         subject:'Registration Successful with Onetro',
         generateTextFromHTML: true,
         html: `
@@ -66,56 +63,6 @@ exports.onCandidateRegistered=functions.firestore.document('CandidateInfo/{Candi
         });
       });
 });
-
-exports.onCandidateRegisteredMail=functions.firestore.document('TEST/{CandidateId}').onCreate((snap,context)=>{
-  const data=snap.data();
-  
-
-  let transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-          type: 'OAuth2',
-          // user: 'ankur.sardar16@gmail.com',
-          // clientId: '1008266135608-il5jgnhue7vhpjb3pjql4hgfu2stfr24.apps.googleusercontent.com',
-          // clientSecret:'Sx7zpORMlJRNfqZYo6iqueZ2',
-          // refreshToken:'1/Mi479BEZ2I7YNKiWAaVcDTnkVwgMaBchoP0WhbdVYB8',
-          user: 'onetro_support@willings.co.jp',
-          clientId: '1099430575149-b3kjo3dn3lfohgbq8ir0vgkeqa49d53n.apps.googleusercontent.com',
-          clientSecret:'KRfEoqGH353Ai8jc5tNu9I-D',
-          refreshToken:'1/uUURtqh4Kdc6tLW2oo2GCqTNrB38s4GfP75xryEJiyYEX9iTaGPJwryL6_lVXC8R'
-      }
-  });
-
-  transporter.use('compile',hbs({
-    viewEngine: 'express-handlebars',
-    viewPath: './views/'
-  }))
-
-  let mailOptions={
-      from:'onetro_support@willings.co.jp',
-      to: 'arpansardar1988@gmail.com',
-      // bcc: 'contact@willings.co.jp',
-      subject:'TEST Registration Successful with Onetro',
-      generateTextFromHTML: true,
-      template: 'index',
-      context: {
-        name: 'Arpan'
-    }
-  };
-
-  return new Promise((resolve, reject) => {
-      transporter.sendMail(mailOptions, error => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve();
-        }
-      });
-    });
-});
-
 exports.onCompanyRegistered=functions.firestore.document('CompanyInfo/{CompanyId}').onCreate((snap,context)=>{
     const data=snap.data();
     
