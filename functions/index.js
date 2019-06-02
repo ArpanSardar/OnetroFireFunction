@@ -33,6 +33,7 @@ exports.onCandidateRegistered=functions.firestore.document('CandidateInfo/{Candi
     let mailOptions={
         from:'onetro_support@willings.co.jp',
         to: data.email,
+        bcc: 'contact@willings.co.jp',
         subject:'Registration Successful with Onetro',
         generateTextFromHTML: true,
         html: `
